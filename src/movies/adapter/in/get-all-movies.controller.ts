@@ -22,7 +22,10 @@ export class GetAllMoviesController {
     type: NotFoundResponse,
   })
   async getAllMovies() {
-    this.logger.debug('GET /v1/movies');
-    return this.getAllMoviesUseCase.getMovies();
+    this.logger.debug('GET /v1/movies init...');
+    const result = await this.getAllMoviesUseCase.getMovies();
+
+    this.logger.debug('GET /v1/movies done.');
+    return result;
   }
 }
