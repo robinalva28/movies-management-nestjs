@@ -6,6 +6,7 @@ import {
 import { UserPort } from '../port/out/user-port';
 import { User, UserBuilder } from '../../domain/entities/user';
 import { UserId } from '../../domain/valueObjects/user-id';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService implements CreateUserUseCase {
@@ -22,12 +23,15 @@ export class UserService implements CreateUserUseCase {
 
   private creationUserProcess(command: CreateUserCommand): User {
     const userBuilder = new UserBuilder();
+    const salt = bcrypt.genSaltSync(10);
+    const passwHashed = bcrypt.hashSync(command.password, salt);
+
     return userBuilder
       .withId(UserId.generate())
       .withName(command.name)
       .withLastname(command.lastname)
       .withEmail(command.email)
-      .withPassword(command.password)
+      .withPassword(passwHashed)
       .withProfileImageUrl(command.profileImageUrl)
       .withUserConfiguration(command.userConfiguration)
       .withUserStatus(command.userStatus)
