@@ -7,4 +7,5 @@ export const UsersPorts = [
   { provide: 'GetPingUseCase', useClass: PingService },
   { provide: 'CreateUserUseCase', useClass: UserService },
   //port out
+  { provide: 'UserPort', useClass: UserAdapter },
 ];
