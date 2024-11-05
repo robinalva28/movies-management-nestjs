@@ -5,6 +5,7 @@ import { BadRequestExceptionFilter } from './common/exceptions/filters/bad-reque
 import { NotFoundExceptionFilter } from './common/exceptions/filters/not-found-exception.filter';
 import { ConflictExceptionFilter } from './common/exceptions/filters/conflict-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { UnauthorizedExceptionFilter } from './common/exceptions/filters/unauthorized-exception.filter';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -20,6 +21,7 @@ async function bootstrap() {
     new BadRequestExceptionFilter(),
     new NotFoundExceptionFilter(),
     new ConflictExceptionFilter(),
+    new UnauthorizedExceptionFilter(),
   );
 
   // Swagger Options

@@ -11,19 +11,11 @@ export class UserConfiguration {
     return new UserConfiguration(ScreenMode.LIGHT);
   }
 
+  public static create(screenMode: ScreenMode): UserConfiguration {
+    return new UserConfiguration(screenMode);
+  }
+
   get screenMode(): ScreenMode {
     return this._screenMode;
-  }
-
-  public changeScreenModeToLight(): UserConfiguration {
-    return new UserConfiguration(ScreenMode.LIGHT);
-  }
-
-  public changeScreenModeToDark(): UserConfiguration {
-    return new UserConfiguration(ScreenMode.DARK);
-  }
-
-  public changeScreenModeToAuto(): UserConfiguration {
-    return new UserConfiguration(ScreenMode.AUTO);
   }
 }
