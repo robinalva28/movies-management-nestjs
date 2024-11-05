@@ -7,17 +7,37 @@ import { UserPort } from '../port/out/user-port';
 import { User, UserBuilder } from '../../domain/entities/user';
 import { UserId } from '../../domain/valueObjects/user-id';
 import * as bcrypt from 'bcrypt';
+import { UserDomainService } from '../../domain/user.domain-service';
+import {
+  ExistUserByEmailCommand,
+  ExistUserByEmailUseCase,
+} from '../port/in/exist-user-by-email.usecase';
+import { BusinessException } from '../../../common/exceptions/business.exception';
 
 @Injectable()
-export class UserService implements CreateUserUseCase {
+export class UserService implements CreateUserUseCase, ExistUserByEmailUseCase {
   private readonly logger = new Logger(UserService.name);
 
-  constructor(@Inject('UserPort') private readonly userPort: UserPort) {}
+  constructor(
+    @Inject('UserPort') private readonly userPort: UserPort,
+    @Inject('UserDomainService')
+    private readonly userDomainService: UserDomainService,
+  ) {}
 
   async createUser(command: CreateUserCommand): Promise<string> {
-    //todo: validar si existe el usuario by email
-    const user = this.creationUserProcess(command);
-    await this.userPort.saveUser(user);
+    const doesExists = await this.existUserByEmail(
+      new ExistUserByEmailCommand(command.email),
+    );
+
+    if (doesExists) {
+      throw new BusinessException('User email already exists');
+    }
+
+    const userToSave = this.creationUserProcess(command);
+
+    this.userDomainService.createUser(userToSave);
+
+    await this.userPort.saveUser(userToSave);
     return `token`;
   }
 
@@ -33,8 +53,14 @@ export class UserService implements CreateUserUseCase {
       .withEmail(command.email)
       .withPassword(passwHashed)
       .withProfileImageUrl(command.profileImageUrl)
-      .withUserConfiguration(command.userConfiguration)
-      .withUserStatus(command.userStatus)
       .build();
+  }
+
+  existUserByEmail(command: ExistUserByEmailCommand): Promise<boolean> {
+    const { email } = command;
+
+    this.logger.debug(`Checking if user exists by email: ${email}`);
+
+    return this.userPort.existsUserByEmail(email);
   }
 }

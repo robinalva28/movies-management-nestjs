@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserPort } from '../../application/port/out/user-port';
 import { User } from '../../domain/entities/user';
 import { UserEntity } from './persistence/user.schema';
-import { Model } from 'mongoose';
+import { Model, Promise } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
@@ -15,13 +15,16 @@ export class UserAdapter implements UserPort {
   ) {}
 
   async saveUser(user: User): Promise<void> {
-    this.logger.debug('Creating user... ', user.email.toString());
-
     const newUser = new this.userSchema(this.mapToEntity(user));
 
+    this.logger.debug('Saving user... ' + user.email.toString());
     await newUser.save();
+  }
 
-    this.logger.debug('User created successfully...', user.email.toString());
+  async existsUserByEmail(email: string): Promise<boolean> {
+    const result = await this.userSchema.exists({ email });
+
+    return !!result;
   }
 
   private mapToEntity(user: User): Partial<UserEntity> {
