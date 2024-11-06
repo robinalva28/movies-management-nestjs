@@ -1,4 +1,4 @@
-import { Injectable, OnModuleInit } from '@nestjs/common';
+import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MoviesEntity } from '../../adapter/out/persistence/movies.schema';
@@ -6,6 +6,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 @Injectable()
 export class MoviesInitService implements OnModuleInit {
+  private readonly logger = new Logger(MoviesInitService.name);
+
   constructor(
     @InjectModel(MoviesEntity.name)
     private readonly moviesModel: Model<MoviesEntity>,
@@ -16,7 +18,7 @@ export class MoviesInitService implements OnModuleInit {
     if (count === 0) {
       const defaultMovies = [
         {
-          movieId: uuidv4(),
+          _id: uuidv4(),
           title: 'The Last Horizon',
           episodeId: 'E1',
           synopsis:
@@ -27,7 +29,7 @@ export class MoviesInitService implements OnModuleInit {
           characters: 'Captain Aria Stone, Dr. Elias Winters',
         },
         {
-          movieId: uuidv4(),
+          _id: uuidv4(),
           title: 'Echoes of the Past',
           episodeId: 'E2',
           synopsis:
@@ -38,7 +40,7 @@ export class MoviesInitService implements OnModuleInit {
           characters: 'Sarah Blake, Professor Jonathan Reeves',
         },
         {
-          movieId: uuidv4(),
+          _id: uuidv4(),
           title: 'The Timekeeper’s Dilemma',
           episodeId: 'E3',
           synopsis:
@@ -49,7 +51,7 @@ export class MoviesInitService implements OnModuleInit {
           characters: 'Dr. Morgan West, Lucas Kane',
         },
         {
-          movieId: uuidv4(),
+          _id: uuidv4(),
           title: 'Beyond the Veil',
           episodeId: 'E4',
           synopsis:
@@ -60,7 +62,7 @@ export class MoviesInitService implements OnModuleInit {
           characters: 'Detective Ray Collins, Emily Vaughn',
         },
         {
-          movieId: uuidv4(),
+          _id: uuidv4(),
           title: 'Echoes of Eternity',
           episodeId: 'E5',
           synopsis:
@@ -72,6 +74,10 @@ export class MoviesInitService implements OnModuleInit {
         },
       ];
       await this.moviesModel.insertMany(defaultMovies);
+
+      this.logger.debug(
+        'Default movies inserted, tryng to consume the API of StarWars...',
+      );
      //TODO: POR ACA COLOCAR EL INTERNAL REST QUE CONSUMA LA API DE STARWARS
     }
   }

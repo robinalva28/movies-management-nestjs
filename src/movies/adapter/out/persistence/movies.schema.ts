@@ -8,7 +8,7 @@ import { SchemaTypes } from 'mongoose';
 })
 export class MoviesEntity {
   @Prop({ type: String, required: true, auto: false })
-  movieId: string;
+  _id: string;
   @Prop({ type: String, required: true })
   title: string;
   @Prop({ type: String, required: true })

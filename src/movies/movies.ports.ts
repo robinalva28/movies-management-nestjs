@@ -4,6 +4,8 @@ import { MoviesAdapter } from './adapter/out/movies.adapter';
 export const MoviesPorts = [
   //ports in
   { provide: 'GetAllMoviesUseCase', useClass: MoviesService },
+  { provide: 'SearchMovieByUseCase', useClass: MoviesService },
+  { provide: 'GetMovieByIdUseCase', useClass: MoviesService },
   //ports out
   { provide: 'MoviesPort', useClass: MoviesAdapter },
 ];

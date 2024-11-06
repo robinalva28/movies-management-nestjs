@@ -9,6 +9,7 @@ import {
 import { ConfigModule } from '@nestjs/config';
 import { MoviesInitService } from './application/service/movies-init.service';
 import { SearchMovieByController } from './adapter/in/search-movie-by.controller';
+import { GetMovieByIdController } from './adapter/in/get-movie-by-id.controller';
 
 @Module({
   imports: [
@@ -17,7 +18,12 @@ import { SearchMovieByController } from './adapter/in/search-movie-by.controller
     ]),
     ConfigModule.forRoot(),
   ],
-  controllers: [GetAllMoviesController, SearchMovieByController],
+  controllers: [
+    GetAllMoviesController,
+    SearchMovieByController,
+    GetMovieByIdController,
+  ],
   providers: [...MoviesPorts, MoviesInitService],
+  exports: [MongooseModule],
 })
 export class MoviesModule {}
