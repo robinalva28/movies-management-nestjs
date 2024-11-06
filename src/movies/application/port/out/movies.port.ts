@@ -10,4 +10,8 @@ export interface MoviesPort {
   doesExistsByTitle(title: string): Promise<boolean>;
 
   save(movie: Movie): Promise<void>;
+
+  update(movie: Movie): Promise<void>;
+
+  delete(id: string): Promise<void>;
 }

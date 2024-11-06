@@ -192,4 +192,8 @@ export class MoviesAdapter implements MoviesPort {
 
     await movieToSave.save();
   }
+
+  async update(movie: Movie): Promise<void> {
+    await this.moviesSchema.updateOne({ _id: movie._id }, movie);
+  }
 }

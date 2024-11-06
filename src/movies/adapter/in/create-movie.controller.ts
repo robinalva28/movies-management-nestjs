@@ -17,7 +17,7 @@ import { InternalServerErrorResponse } from '../../../common/exceptions/filters/
 import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
 
 @Controller('v1/movies')
-@ApiTags('movies')
+@ApiTags('admin-movies')
 export class CreateMovieController {
   private readonly logger = new Logger(CreateMovieController.name);
 
