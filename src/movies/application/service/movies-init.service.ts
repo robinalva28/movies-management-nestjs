@@ -1,8 +1,20 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Inject, Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { MoviesEntity } from '../../adapter/out/persistence/movies.schema';
 import { v4 as uuidv4 } from 'uuid';
+import { StarWarsRestAdapter } from '../../adapter/out/star-wars-rest.adapter';
+
+export interface MovieDTO {
+  _id: string;
+  title: string;
+  episodeId: string;
+  synopsis: string;
+  director: string;
+  producer: string;
+  releaseDate: Date;
+  characters: string;
+}
 
 @Injectable()
 export class MoviesInitService implements OnModuleInit {
@@ -11,12 +23,13 @@ export class MoviesInitService implements OnModuleInit {
   constructor(
     @InjectModel(MoviesEntity.name)
     private readonly moviesModel: Model<MoviesEntity>,
+    @Inject('StarWarsPort') private readonly starWarsPort: StarWarsRestAdapter,
   ) {}
 
   async onModuleInit() {
     const count = await this.moviesModel.countDocuments();
     if (count === 0) {
-      const defaultMovies = [
+      const defaultMovies: MovieDTO[] = [
         {
           _id: uuidv4(),
           title: 'The Last Horizon',
@@ -78,7 +91,22 @@ export class MoviesInitService implements OnModuleInit {
       this.logger.debug(
         'Default movies inserted, tryng to consume the API of StarWars...',
       );
-     //TODO: POR ACA COLOCAR EL INTERNAL REST QUE CONSUMA LA API DE STARWARS
+      try {
+        const starWarsMovies = await this.starWarsPort
+          .getStarWars()
+          .then((movies) => {
+            return movies.map((movie: MovieDTO) => {
+              return {
+                _id: uuidv4(),
+                ...movie,
+              };
+            });
+          });
+        await this.moviesModel.insertMany(starWarsMovies);
+        this.logger.debug('Star Wars movies inserted.');
+      } catch (error) {
+        this.logger.error('Error inserting Star Wars movies.', error);
+      }
     }
   }
 }
