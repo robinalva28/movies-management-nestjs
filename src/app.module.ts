@@ -3,6 +3,10 @@ import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { JwtModule } from '@nestjs/jwt';
 import { MoviesModule } from './movies/movies.module';
+import { PermissionsGuard } from './common/auth/permissions.guard';
+import { APP_GUARD } from '@nestjs/core';
+import { JwtGuard } from './common/auth/jwt.guard';
+import { AdministratorsModule } from './administrators/administrators.module';
 
 @Module({
   imports: [
@@ -12,12 +16,22 @@ import { MoviesModule } from './movies/movies.module';
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: '1h' },
+      signOptions: { expiresIn: '10h' },
     }),
     UsersModule,
-    MoviesModule
+    MoviesModule,
+    AdministratorsModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
+    },
+  ],
 })
 export class AppModule {}

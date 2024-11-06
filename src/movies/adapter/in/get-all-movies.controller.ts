@@ -2,6 +2,7 @@ import { Controller, Get, HttpCode, Inject, Logger } from '@nestjs/common';
 import { ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { GetAllMoviesUseCase } from '../../application/port/in/get-all-movies.usecase';
 import { NotFoundResponse } from '../../../common/exceptions/filters/not-found-exception.filter';
+import { Public } from '../../../common/auth/public.decorator';
 
 @Controller('v1/movies')
 @ApiTags('movies')
@@ -14,6 +15,7 @@ export class GetAllMoviesController {
   ) {}
 
   @Get()
+  @Public()
   @ApiOkResponse({
     description: 'Movies were successfully retrieved',
   })
