@@ -2,7 +2,8 @@ import {
   Body,
   Controller,
   HttpCode,
-  HttpStatus, Inject,
+  HttpStatus,
+  Inject,
   Logger,
   Post,
 } from '@nestjs/common';
@@ -16,7 +17,9 @@ import {
   ApiConflictResponse,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
-  ApiProperty, ApiTags,
+  ApiOperation,
+  ApiProperty,
+  ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { InternalServerErrorResponse } from '../../../common/exceptions/filters/internal-server-error-exception.filter';
@@ -38,7 +41,10 @@ export class SignInAdministratorResponse {
 export class UserSignInController {
   private readonly logger = new Logger(UserSignInController.name);
 
-  constructor(@Inject('UserSignInUseCase')private readonly userSignInUseCase: SignInUseCase) {}
+  constructor(
+    @Inject('UserSignInUseCase')
+    private readonly userSignInUseCase: SignInUseCase,
+  ) {}
 
   @Post('/auth/sign-in')
   @HttpCode(HttpStatus.OK)
@@ -46,6 +52,7 @@ export class UserSignInController {
   @ApiOkResponse({
     type: SignInAdministratorResponse,
   })
+  @ApiOperation({ summary: 'Sign in a user' })
   @ApiBadRequestResponse({
     type: BadRequestResponse,
   })
