@@ -18,6 +18,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ConflictResponse } from '../../../common/exceptions/filters/conflict-exception.filter';
+import { Public } from '../../../common/auth/public.decorator';
 
 export class TokenResponse {
   constructor(public readonly token: string) {}
@@ -34,6 +35,7 @@ export class CreateUserController {
   ) {}
 
   @Post('/')
+  @Public()
   @HttpCode(201)
   @ApiCreatedResponse({
     description: 'The user has been successfully created.',

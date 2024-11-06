@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { PingController } from './adapter/in/ping.controller';
 import { UsersPorts } from './users.ports';
 import { CreateUserController } from './adapter/in/create-ser.controller';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -12,7 +11,7 @@ import { UserSignInController } from './adapter/in/user-sign-in.controller';
     MongooseModule.forFeature([{ name: UserEntity.name, schema: UserSchema }]),
     ConfigModule.forRoot(),
   ],
-  controllers: [PingController, CreateUserController, UserSignInController],
+  controllers: [CreateUserController, UserSignInController],
   providers: [...UsersPorts],
   exports: [MongooseModule],
 })

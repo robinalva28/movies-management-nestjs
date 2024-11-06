@@ -1,6 +1,7 @@
 import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
+  ApiBearerAuth,
   ApiConflictResponse,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
@@ -15,7 +16,10 @@ import {
 import { ConflictResponse } from '../../../common/exceptions/filters/conflict-exception.filter';
 import { InternalServerErrorResponse } from '../../../common/exceptions/filters/internal-server-error-exception.filter';
 import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
+import { Permission } from '../../../administrators/common/roles/roles.decorator';
+import { PermissionsEnum } from '../../../administrators/common/permissions/permissions.enum';
 
+@ApiBearerAuth()
 @Controller('v1/movies')
 @ApiTags('admin-movies')
 export class CreateMovieController {
@@ -27,6 +31,7 @@ export class CreateMovieController {
   ) {}
 
   @Post('/')
+  @Permission(PermissionsEnum.MOVIES_CREATE)
   @ApiOperation({ summary: 'Create a movie' })
   @ApiOkResponse({ description: 'Movie created successfully' })
   @ApiConflictResponse({ type: ConflictResponse })

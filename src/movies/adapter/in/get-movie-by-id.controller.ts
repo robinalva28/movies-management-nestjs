@@ -7,13 +7,15 @@ import {
   Logger,
   Param,
 } from '@nestjs/common';
-import { ApiNotFoundResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   GetMovieByIdCommand,
   GetMovieByIdUseCase,
 } from '../../application/port/in/get-movie-by-id.usecase';
 import { NotFoundResponse } from 'src/common/exceptions/filters/not-found-exception.filter';
+import { UserAuthenticated } from '../../../common/auth/users-auth.decorator';
 
+@ApiBearerAuth()
 @Controller('v1/movies')
 @ApiTags('movies')
 export class GetMovieByIdController {
@@ -25,7 +27,9 @@ export class GetMovieByIdController {
   ) {}
 
   @Get(':id')
+  @UserAuthenticated()
   @HttpCode(HttpStatus.OK)
+  @ApiOkResponse({ description: 'Movie found' })
   @ApiNotFoundResponse({ type: NotFoundResponse })
   async getMovieById(@Param('id') id: string) {
     this.logger.debug(`Getting movie by id ${id}`);

@@ -8,13 +8,16 @@ import {
   Param,
   Patch,
 } from '@nestjs/common';
-import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import {
   UpdateMovieCommand,
   UpdateMovieUseCase,
 } from '../../application/port/in/update-movie.usecase';
 import { UpdateMovieBody } from './body/update-movie.body';
+import { Permission } from '../../../administrators/common/roles/roles.decorator';
+import { PermissionsEnum } from '../../../administrators/common/permissions/permissions.enum';
 
+@ApiBearerAuth()
 @Controller('v1/movies')
 @ApiTags('admin-movies')
 export class UpdateMovieController {
@@ -26,6 +29,7 @@ export class UpdateMovieController {
   ) {}
 
   @Patch('/:id')
+  @Permission(PermissionsEnum.MOVIES_UPDATE)
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'Movie updated successfully' })
   async updateMovie(@Param('id') id: string, @Body() body: UpdateMovieBody) {

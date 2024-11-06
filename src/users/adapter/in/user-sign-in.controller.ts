@@ -23,6 +23,7 @@ import { InternalServerErrorResponse } from '../../../common/exceptions/filters/
 import { UnauthorizedResponse } from '../../../common/exceptions/filters/unauthorized-exception.filter';
 import { ConflictResponse } from '../../../common/exceptions/filters/conflict-exception.filter';
 import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
+import { Public } from '../../../common/auth/public.decorator';
 
 export class SignInAdministratorResponse {
   @ApiProperty({
@@ -41,6 +42,7 @@ export class UserSignInController {
 
   @Post('/auth/sign-in')
   @HttpCode(HttpStatus.OK)
+  @Public()
   @ApiOkResponse({
     type: SignInAdministratorResponse,
   })

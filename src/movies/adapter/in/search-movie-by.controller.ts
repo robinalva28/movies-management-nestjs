@@ -6,13 +6,16 @@ import {
   Logger,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiQuery } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   SearchMovieByCommand,
   SearchMovieByUseCase,
 } from '../../application/port/in/search-movie-by.usecase';
+import { UserAuthenticated } from '../../../common/auth/users-auth.decorator';
 
+@ApiBearerAuth()
 @Controller('v1/movies')
+@ApiTags('movies')
 export class SearchMovieByController {
   private readonly logger = new Logger(SearchMovieByController.name);
 
@@ -22,6 +25,7 @@ export class SearchMovieByController {
   ) {}
 
   @Get('/search')
+  @UserAuthenticated()
   @HttpCode(200)
   @ApiOperation({ summary: 'Search a movie by query' })
   @ApiQuery({ name: 'query', description: 'Query to search', required: true })
