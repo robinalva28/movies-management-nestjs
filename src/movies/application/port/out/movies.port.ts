@@ -6,4 +6,8 @@ export interface MoviesPort {
   searchMovieBy(query: string): Promise<any[]>;
 
   getMovieById(id: string): Promise<Movie>;
+
+  doesExistsByTitle(title: string): Promise<boolean>;
+
+  save(movie: Movie): Promise<void>;
 }

@@ -6,6 +6,7 @@ export const MoviesPorts = [
   //ports in
   { provide: 'GetAllMoviesUseCase', useClass: MoviesService },
   { provide: 'SearchMovieByUseCase', useClass: MoviesService },
+  { provide: 'ExistsMovieByTitleUseCase', useClass: MoviesService },
   { provide: 'GetMovieByIdUseCase', useClass: MoviesService },
   { provide: 'CreateMovieUseCase', useClass: AdminMoviesService },
   //ports out

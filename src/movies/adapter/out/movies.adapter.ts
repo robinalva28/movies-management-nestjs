@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Movie } from '../../domain/entities/movie';
 import { InjectModel } from '@nestjs/mongoose';
 import { MoviesEntity } from './persistence/movies.schema';
-import { Model } from 'mongoose';
+import { Model, Promise } from 'mongoose';
 
 @Injectable()
 export class MoviesAdapter implements MoviesPort {
@@ -161,7 +161,7 @@ export class MoviesAdapter implements MoviesPort {
 
   private entityToDomain(movie: MoviesEntity): Movie {
     return {
-      movieId: movie._id,
+      _id: movie._id,
       title: movie.title,
       episodeId: movie.episodeId,
       synopsis: movie.synopsis,
@@ -170,5 +170,26 @@ export class MoviesAdapter implements MoviesPort {
       releaseDate: movie.releaseDate,
       characters: movie.characters,
     };
+  }
+
+  async doesExistsByTitle(title: string): Promise<boolean> {
+    const exists = await this.moviesSchema.exists({ title: title });
+
+    return !!exists;
+  }
+
+  async save(movie: Movie): Promise<void> {
+    const movieToSave = new this.moviesSchema({
+      _id: movie._id,
+      title: movie.title,
+      episodeId: movie.episodeId,
+      synopsis: movie.synopsis,
+      director: movie.director,
+      producer: movie.producer,
+      releaseDate: movie.releaseDate,
+      characters: movie.characters,
+    });
+
+    await movieToSave.save();
   }
 }
