@@ -2,11 +2,11 @@ import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse,
+  ApiConflictResponse, ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
   ApiOperation,
-  ApiTags,
+  ApiTags, ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CreateMovieBody } from './body/create-movie.body';
 import {
@@ -18,6 +18,8 @@ import { InternalServerErrorResponse } from '../../../common/exceptions/filters/
 import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
 import { Permission } from '../../../administrators/common/roles/roles.decorator';
 import { PermissionsEnum } from '../../../administrators/common/permissions/permissions.enum';
+import { ForbiddenResponse } from '../../../common/exceptions/filters/forbidden-exception.filter';
+import { UnauthorizedResponse } from '../../../common/exceptions/filters/unauthorized-exception.filter';
 
 @ApiBearerAuth()
 @Controller('v1/movies')
@@ -35,11 +37,17 @@ export class CreateMovieController {
   @ApiOperation({ summary: 'Create a movie' })
   @ApiOkResponse({ description: 'Movie created successfully' })
   @ApiConflictResponse({ type: ConflictResponse })
-  @ApiInternalServerErrorResponse({
-    type: InternalServerErrorResponse,
-  })
   @ApiBadRequestResponse({
     type: BadRequestResponse,
+  })
+  @ApiUnauthorizedResponse({
+    type: UnauthorizedResponse,
+  })
+  @ApiForbiddenResponse({
+    type: ForbiddenResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    type: InternalServerErrorResponse,
   })
   async createMovie(@Body() body: CreateMovieBody) {
     this.logger.debug(`Creating movie... ${body.title}`);

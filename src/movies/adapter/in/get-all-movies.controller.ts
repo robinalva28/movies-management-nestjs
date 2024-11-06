@@ -1,8 +1,15 @@
 import { Controller, Get, HttpCode, Inject, Logger } from '@nestjs/common';
-import { ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiInternalServerErrorResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { GetAllMoviesUseCase } from '../../application/port/in/get-all-movies.usecase';
 import { NotFoundResponse } from '../../../common/exceptions/filters/not-found-exception.filter';
 import { Public } from '../../../common/auth/public.decorator';
+import { InternalServerErrorResponse } from '../../../common/exceptions/filters/internal-server-error-exception.filter';
 
 @Controller('v1/movies')
 @ApiTags('movies')
@@ -23,6 +30,9 @@ export class GetAllMoviesController {
   @ApiOperation({ summary: 'Get all movies' })
   @ApiNotFoundResponse({
     type: NotFoundResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    type: InternalServerErrorResponse,
   })
   async getAllMovies() {
     this.logger.debug('GET /v1/movies init...');

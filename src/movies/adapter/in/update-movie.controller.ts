@@ -8,7 +8,16 @@ import {
   Param,
   Patch,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import {
   UpdateMovieCommand,
   UpdateMovieUseCase,
@@ -16,6 +25,10 @@ import {
 import { UpdateMovieBody } from './body/update-movie.body';
 import { Permission } from '../../../administrators/common/roles/roles.decorator';
 import { PermissionsEnum } from '../../../administrators/common/permissions/permissions.enum';
+import { ForbiddenResponse } from '../../../common/exceptions/filters/forbidden-exception.filter';
+import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
+import { InternalServerErrorResponse } from '../../../common/exceptions/filters/internal-server-error-exception.filter';
+import { UnauthorizedResponse } from '../../../common/exceptions/filters/unauthorized-exception.filter';
 
 @ApiBearerAuth()
 @Controller('v1/movies')
@@ -32,6 +45,19 @@ export class UpdateMovieController {
   @Permission(PermissionsEnum.MOVIES_UPDATE)
   @HttpCode(HttpStatus.OK)
   @ApiOkResponse({ description: 'Movie updated successfully' })
+  @ApiOperation({ summary: 'Update a movie' })
+  @ApiUnauthorizedResponse({
+    type: UnauthorizedResponse,
+  })
+  @ApiForbiddenResponse({
+    type: ForbiddenResponse,
+  })
+  @ApiBadRequestResponse({
+    type: BadRequestResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    type: InternalServerErrorResponse,
+  })
   async updateMovie(@Param('id') id: string, @Body() body: UpdateMovieBody) {
     this.logger.debug(`Updating movie... ${id}`);
     return await this.updateMovieUseCase.updateMovie(

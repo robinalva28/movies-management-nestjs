@@ -11,6 +11,9 @@ import {
   ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiForbiddenResponse,
+  ApiInternalServerErrorResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import {
@@ -21,6 +24,8 @@ import { CreateAdministratorRequestBody } from './body/create-administrator.body
 import { ConflictResponse } from '../../../common/exceptions/filters/conflict-exception.filter';
 import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
 import { Public } from '../../../common/auth/public.decorator';
+import { InternalServerErrorResponse } from '../../../common/exceptions/filters/internal-server-error-exception.filter';
+import { ForbiddenResponse } from '../../../common/exceptions/filters/forbidden-exception.filter';
 
 //@ApiBearerAuth()
 @Controller('/v1/administrators')
@@ -37,6 +42,7 @@ export class CreateAdministratorController {
   @Public()
   @HttpCode(HttpStatus.CREATED)
   //@Permission(PermissionsEnum.ADMINISTRATORS_CREATE)
+  @ApiOperation({ summary: 'Create an administrator' })
   @ApiCreatedResponse({
     description: 'Administrator created',
   })
@@ -45,6 +51,12 @@ export class CreateAdministratorController {
   })
   @ApiConflictResponse({
     type: ConflictResponse,
+  })
+  @ApiForbiddenResponse({
+    type: ForbiddenResponse,
+  })
+  @ApiInternalServerErrorResponse({
+    type: InternalServerErrorResponse,
   })
   async createAdministrator(
     @Body() body: CreateAdministratorRequestBody,

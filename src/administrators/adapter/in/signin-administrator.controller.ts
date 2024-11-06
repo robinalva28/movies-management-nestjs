@@ -12,6 +12,7 @@ import {
   ApiConflictResponse,
   ApiInternalServerErrorResponse,
   ApiOkResponse,
+  ApiOperation,
   ApiProperty,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -49,6 +50,7 @@ export class SigninAdministratorController {
   @Post('/auth/signin')
   @Public()
   @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Sign in an administrator' })
   @ApiOkResponse({
     type: SignInAdministratorResponse,
   })

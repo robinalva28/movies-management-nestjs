@@ -12,13 +12,16 @@ import {
   CreateUserUseCase,
 } from '../../application/port/in/create-user.usecase';
 import {
+  ApiBadRequestResponse,
   ApiConflictResponse,
   ApiCreatedResponse,
   ApiInternalServerErrorResponse,
+  ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { ConflictResponse } from '../../../common/exceptions/filters/conflict-exception.filter';
 import { Public } from '../../../common/auth/public.decorator';
+import { BadRequestResponse } from '../../../common/exceptions/filters/bad-request-exception.filter';
 
 export class TokenResponse {
   constructor(public readonly token: string) {}
@@ -37,11 +40,15 @@ export class CreateUserController {
   @Post('/')
   @Public()
   @HttpCode(201)
+  @ApiOperation({ summary: 'Create a user' })
   @ApiCreatedResponse({
     description: 'The user has been successfully created.',
   })
   @ApiConflictResponse({
     type: ConflictResponse,
+  })
+  @ApiBadRequestResponse({
+    type: BadRequestResponse,
   })
   @ApiInternalServerErrorResponse({
     description: 'Internal server error.',
