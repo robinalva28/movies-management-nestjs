@@ -16,10 +16,18 @@ import {
   UpdateMovieCommand,
   UpdateMovieUseCase,
 } from '../port/in/update-movie.usecase';
+import {
+  DeleteMovieCommand,
+  DeleteMovieUseCase,
+} from '../port/in/delete-movie.usecase';
 
 @Injectable()
 export class AdminMoviesService
-  implements CreateMovieUseCase, ExistsMovieByTitleUseCase, UpdateMovieUseCase
+  implements
+    CreateMovieUseCase,
+    ExistsMovieByTitleUseCase,
+    UpdateMovieUseCase,
+    DeleteMovieUseCase
 {
   private readonly logger = new Logger(AdminMoviesService.name);
 
@@ -141,5 +149,9 @@ export class AdminMoviesService
 
     this.logger.debug('Movie updated on service.');
     return movieToUpdate;
+  }
+
+  async deleteMovie(command: DeleteMovieCommand): Promise<void> {
+    await this.moviesPort.delete(command.id);
   }
 }

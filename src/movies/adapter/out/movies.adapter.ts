@@ -196,4 +196,8 @@ export class MoviesAdapter implements MoviesPort {
   async update(movie: Movie): Promise<void> {
     await this.moviesSchema.updateOne({ _id: movie._id }, movie);
   }
+
+  async delete(id: string): Promise<void> {
+    await this.moviesSchema.deleteOne({ _id: id });
+  }
 }

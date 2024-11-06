@@ -10,6 +10,7 @@ export const MoviesPorts = [
   { provide: 'GetMovieByIdUseCase', useClass: MoviesService },
   { provide: 'CreateMovieUseCase', useClass: AdminMoviesService },
   { provide: 'UpdateMovieUseCase', useClass: AdminMoviesService },
+  { provide: 'DeleteMovieUseCase', useClass: AdminMoviesService },
   //ports out
   { provide: 'MoviesPort', useClass: MoviesAdapter },
 ];

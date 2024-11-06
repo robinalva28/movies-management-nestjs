@@ -12,6 +12,7 @@ import { SearchMovieByController } from './adapter/in/search-movie-by.controller
 import { GetMovieByIdController } from './adapter/in/get-movie-by-id.controller';
 import { CreateMovieController } from './adapter/in/create-movie.controller';
 import { UpdateMovieController } from './adapter/in/update-movie.controller';
+import { DeleteMovieController } from './adapter/in/delete-movie.controller';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { UpdateMovieController } from './adapter/in/update-movie.controller';
     GetMovieByIdController,
     CreateMovieController,
     UpdateMovieController,
+    DeleteMovieController,
   ],
   providers: [...MoviesPorts, MoviesInitService],
   exports: [MongooseModule],
