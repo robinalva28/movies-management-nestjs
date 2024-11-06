@@ -6,6 +6,7 @@ import { NotFoundExceptionFilter } from './common/exceptions/filters/not-found-e
 import { ConflictExceptionFilter } from './common/exceptions/filters/conflict-exception.filter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { UnauthorizedExceptionFilter } from './common/exceptions/filters/unauthorized-exception.filter';
+import { InternalServerErrorExceptionFilter } from './common/exceptions/filters/internal-server-error-exception.filter';
 
 async function bootstrap() {
   const logger = new Logger('bootstrap');
@@ -22,6 +23,7 @@ async function bootstrap() {
     new NotFoundExceptionFilter(),
     new ConflictExceptionFilter(),
     new UnauthorizedExceptionFilter(),
+    new InternalServerErrorExceptionFilter(),
   );
 
   // Swagger Options

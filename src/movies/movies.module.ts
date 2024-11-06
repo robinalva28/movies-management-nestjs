@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { MoviesInitService } from './application/service/movies-init.service';
 import { SearchMovieByController } from './adapter/in/search-movie-by.controller';
 import { GetMovieByIdController } from './adapter/in/get-movie-by-id.controller';
+import { CreateMovieController } from './adapter/in/create-movie.controller';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { GetMovieByIdController } from './adapter/in/get-movie-by-id.controller'
     GetAllMoviesController,
     SearchMovieByController,
     GetMovieByIdController,
+    CreateMovieController,
   ],
   providers: [...MoviesPorts, MoviesInitService],
   exports: [MongooseModule],
