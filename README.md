@@ -59,12 +59,16 @@ Antes de ejecutar la aplicación, asegúrate de tener instalados los siguientes 
     - **Inicio de Sesión**: Los usuarios pueden autenticarse y obtener un token de acceso JWT.
 
 3. **Endpoints de la API**
-    - **Autenticación**
+    - **Autenticación Usuarios**
         - `POST /api/v1/users`: Registro de nuevos usuarios.
         - `POST /api/v1/users/auth/sign-in`: Inicio de sesión y obtención de token JWT.
+    - **Autenticacion Administradores**
+        - `POST /api/v1/administrators`: Registro de nuevos administradores.
+        - `POST /api/v1/administrators/auth/signin`: Inicio de sesión y obtención de token JWT(Al iniciar sesión se consultan en BD los permisos del rol que posee el Administrador y se cargan al JWT ).
     - **Películas**
         - `GET /api/v1/movies`: Obtiene la lista de películas (disponible para todos los usuarios no autenticados).
         - `GET /api/v1/movies/:id`: Obtiene los detalles de una película específica (solo accesible para "Usuarios Regulares Autenticados").
+        - `GET /api/v1/movies/search`: Obtiene peliculas en base a la coincidencia de una cadena de texto de entrada con título y/o sinopsis (solo accesible para "Usuarios Regulares Autenticados").
         - `POST /api/v1/movies`: Crea una nueva película (solo accesible para "Administradores" con el rol `ROLE_ADMINISTRATOR_FULL_ACCESS` o `ROLE_ADMINISTRATOR_ONLY_CREATE`).
         - `PATCH /api/v1/movies/:id`: Actualiza una película existente (solo accesible para "Administradores" con el rol `ROLE_ADMINISTRATOR_FULL_ACCESS` o `ROLE_ADMINISTRATOR_ONLY_UPDATE`).
         - `DELETE /api/v1/movies/:id`: Elimina una película (solo accesible para "Administradores" con el rol `ROLE_ADMINISTRATOR_FULL_ACCESS` o `ROLE_ADMINISTRATOR_ONLY_DELETE`).
