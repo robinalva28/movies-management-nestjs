@@ -2,11 +2,10 @@ import { Body, Controller, Inject, Logger, Post } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBearerAuth,
-  ApiConflictResponse, ApiForbiddenResponse,
+  ApiConflictResponse, ApiCreatedResponse, ApiForbiddenResponse,
   ApiInternalServerErrorResponse,
-  ApiOkResponse,
   ApiOperation,
-  ApiTags, ApiUnauthorizedResponse,
+  ApiTags, ApiUnauthorizedResponse
 } from '@nestjs/swagger';
 import { CreateMovieBody } from './body/create-movie.body';
 import {
@@ -35,7 +34,7 @@ export class CreateMovieController {
   @Post('/')
   @Permission(PermissionsEnum.MOVIES_CREATE)
   @ApiOperation({ summary: 'Create a movie' })
-  @ApiOkResponse({ description: 'Movie created successfully' })
+  @ApiCreatedResponse({ description: 'Movie created successfully' })
   @ApiConflictResponse({ type: ConflictResponse })
   @ApiBadRequestResponse({
     type: BadRequestResponse,
